@@ -3,25 +3,23 @@ __author__ = '1002097'
 import requests
 import Weather
 import ConfigParser
-import json
 
-url = 'http://apis.skplanetx.com/weather/current/hourly?lon=126.8&village=&county=&lat=37.7&city=&version=1'
+class RequestUse :
 
+    def headerMake(self,value) :
+        return {'appKey' : value}
 
-def headerMake(value) :
-    return {'appKey' : value}
+    def getWeather(self) :
+        config = ConfigParser.RawConfigParser()
+        config.read('config.properties')
+        url = config.get('BASIC','weather.url')
+        ra= requests.get(url,headers= self.headerMake(config.get('BASIC','weather.key')))
+        we = Weather.Weather()
 
-def getWeather() :
-    config = ConfigParser.RawConfigParser()
-    config.read('config.properties')
+        we.setRawJson(ra.text)
+        we.parseWeather()
 
-    ra= requests.get(url,headers=headerMake(config.get('BASIC','weather.key')))
-    we = Weather.Weather()
+        print we.getcloud()
 
-    we.setRawJson(ra.text)
-    we.parseWeather()
-
-    print we.getcloud()
-
-
-getWeather()
+ru = RequestUse()
+ru.getWeather()

@@ -11,7 +11,9 @@ class PlayMedia :
 
     def playMp3(self,fileName):
         pygame.mixer.music.load('workfile.mp3')
-        pygame.mixer.music.play()
+        sound= pygame.mixer.music.play()
+        while sound.get_busy():
+            pygame.time.delay(100)
 
 
 py=PlayMedia()
